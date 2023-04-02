@@ -1,0 +1,22 @@
+version: "3.8"
+
+services:
+  rviz:
+    build:
+      context: ../
+      dockerfile: ./ros2/Dockerfile
+    container_name: rviz_container
+    privileged: true
+    environment:
+      - DISPLAY=$DISPLAY
+      - QT_X11_NO_MITSHM=1
+      - XAUTHORITY=/tmp/.docker.xauth
+      - NVIDIA_VISIBLE_DEVICES=all
+      - NVIDIA_DRIVER_CAPABILITIES=all
+    volumes:
+      - /tmp/.X11-unix:/tmp/.X11-unix:rw
+      - /tmp/.docker.xauth:/tmp/.docker.xauth:rw
+    command: >
+      /bin/bash -c "sleep 1 && \
+                    source /ros_ws/install/setup.bash && \
+                    ros2 launch rise_asset_description display.launch.py"
